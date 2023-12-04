@@ -25,7 +25,7 @@ func RegisterUser(c *gin.Context) {
 
 	newUser.Password = string(hashedPassword)
 
-	db := database.DB // Assuming 'database.DB' holds the reference to the initialized GORM connection
+	db := database.DB
 	if err := db.Create(&newUser).Error; err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Error creating user"})
 		return
@@ -41,7 +41,7 @@ func LoginUser(c *gin.Context) {
 		return
 	}
 
-	db := database.DB // Assuming 'database.DB' holds the reference to the initialized GORM connection
+	db := database.DB
 	if err := db.Where("email = ?", user.Email).First(&user).Error; err != nil {
 		c.JSON(http.StatusUnauthorized, gin.H{"error": "Invalid email or password"})
 		return
@@ -66,7 +66,7 @@ func UpdateUser(c *gin.Context) {
 	userID := c.Param("userId")
 	var updatedUser models.User
 
-	db := database.DB // Assuming 'database.DB' holds the reference to the initialized GORM connection
+	db := database.DB
 	if err := db.Where("id = ?", userID).First(&updatedUser).Error; err != nil {
 		c.JSON(http.StatusNotFound, gin.H{"error": "User not found"})
 		return
@@ -89,7 +89,7 @@ func DeleteUser(c *gin.Context) {
 	userID := c.Param("userId")
 	var user models.User
 
-	db := database.DB // Assuming 'database.DB' holds the reference to the initialized GORM connection
+	db := database.DB
 	if err := db.Where("id = ?", userID).First(&user).Error; err != nil {
 		c.JSON(http.StatusNotFound, gin.H{"error": "User not found"})
 		return
